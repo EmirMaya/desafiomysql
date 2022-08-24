@@ -1,8 +1,8 @@
 import express from 'express';
 import { Server } from 'socket.io';
-import {__dirname,___dirname} from './utils.js';
+import __dirname from './utils.js';
 import productsRouter from './routes/products.router.js';
-import chatMessagesRouter from './routes/chatMessages.router.js';
+import chatRouter from './routes/chat.router.js';
 import fs from 'fs';
 
 import handlebars from 'express-handlebars';
@@ -12,7 +12,7 @@ const app = express();
 const PORT =   process.env.PORT || 8080;
 const server = app.listen(PORT, () => {
   productsRouter.createProductsTable();
-  chatMessagesRouter.createMessagesTable()
+  chatRouter.createMessagesTable()
   console.log(`Listening on PORT ${PORT}`);
 })
 server.on('error', (error) => console.log({'Server Error': error}))
@@ -23,7 +23,7 @@ const io = new Server(server);
 
 app.set('views', 'src/views')
 
-app.use(express.static(___dirname+'/public'));
+app.use(express.static(__dirname+'/public'));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
@@ -99,14 +99,14 @@ io.on('connection', async (socket) => {
     socket.on('chatMessagesRequest', async () => {
       console.log('>>> chatMessagesRequest')
 
-      const allMessages = await chatMessagesRouter.getAllMessages()
+      const allMessages = await chatRouter.getAllMessages()
       socket.emit('updateChatRoom', allMessages)
     })
 
     socket.on('addNewMessage', async (newMessage) => {
       console.log('>>> addNewMessage')
-      await chatMessagesRouter.addNewMessage(newMessage)
-      const allMessages = await chatMessagesRouter.getAllMessages()
+      await chatRouter.addNewMessage(newMessage)
+      const allMessages = await chatRouter.getAllMessages()
       io.sockets.emit('updateChatRoom', allMessages)
     })
 

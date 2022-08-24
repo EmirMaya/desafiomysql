@@ -1,5 +1,5 @@
 import knex from 'knex';
-import initialProducts from '../../database/initialProducts.js';
+import initialProducts from '../../db/initialProd.js';
 
 export class SqlClient {
     constructor(config, items) {

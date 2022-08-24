@@ -3,9 +3,9 @@ export const mariaDBOptions = {
     connection:{
         host:"localhost",
         user:"root",
-        password:"root",
+        password:"",
         port:'3306',
-        database:'coderDB',
+        database:'Local instance MySQL80',
         ssl: false        
     }
 }
